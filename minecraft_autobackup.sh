@@ -31,7 +31,10 @@ CRONJOB=1
 MAILTO="mail@adress.com"
 
 # Update every 'n' Minutes
-UPDATEMINS=60
+UPDATEMINS=0
+
+# Update every 'n' Hours, will ignore hours is minutes is greater than 0, will default to 6 if hours set to 0
+UPDATEHOURS=6
 
 # Delete backups older than 'n' DAYS
 OLDBACKUPS=7
@@ -209,14 +212,21 @@ then
    if [ $UPDATEMINS -eq 0 -o $UPDATEMINS -lt 0 ]
    then
       MINS="*"
+      if [ $UPDATEHOURS -eq 0 -o $UPDATEHOURS -lt 0 ]
+      then
+         HOURS="*/6"
+      else
+         HOURS="*/$UPDATEHOURS"
+      fi
    else
       MINS="*/$UPDATEMINS"
+      HOURS="*"
    fi
 
    #Check if cronjob exists, if not then create.
    crontab -l > .crons
    EXIST=`crontab -l | grep $0 | cut -d";" -f2`
-   CRONSET="$MINS * * * * cd $PWD;$0"
+   CRONSET="$MINS $HOURS * * * cd $PWD;$0"
 
    if [ "$EXIST" == "$0" ]
    then
