@@ -211,7 +211,7 @@ then
    #Work out crontime
    if [ $UPDATEMINS -eq 0 -o $UPDATEMINS -lt 0 ]
    then
-      MINS="*"
+      MINS="0"
       if [ $UPDATEHOURS -eq 0 -o $UPDATEHOURS -lt 0 ]
       then
          HOURS="*/6"
